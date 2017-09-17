@@ -1,17 +1,17 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper" v-el:menu-wrapper>
+    <div class="menu-wrapper" ref:menu-wrapper>
       <ul>
-        <li v-for="item in goods" class="menu-item">
+        <li v-for="(item, index) in goods" class="menu-item" :class="{'current':currentIndex===index}" @click="selectMenu(index)">
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper" v-el:foods-wrapper>
+    <div class="foods-wrapper" ref:foods-wrapper>
       <ul>
-        <li v-for="item in goods" class="food-list">
+        <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="food in item.foods" class="food-item border-1px">
@@ -50,7 +50,21 @@
     },
     data() {
       return {
-        goods: []
+        goods: [],
+        listHeight: [],
+        scrollY: 0,
+      }
+    },
+    computed: {
+      currentIndex() {
+        for(let i=0;i<this.listHeight.length;i++){
+          let height1 = this.listHeight[i];
+          let height2 = this.listHeight[i + 1];
+          if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+            return i;
+          }
+        }
+        return 0;
       }
     },
     created() {
@@ -62,17 +76,41 @@
           this.goods = response.data;
           this.$nextTick(() => {
             this._initScroll();
+            this._calculateHeight();
           });
-          console.log(this.goods);
         }
       });
     },
     methods: {
+      selectMenu(index) {
+        let foodList = document.querySelector('.foods-wrapper').getElementsByClassName('food-list-hook');
+        let el = foodList[index];
+        this.foodScroll.scrollToElement(el, 300);
+      },
       _initScroll() {
         let menuWrapper = document.querySelector('.menu-wrapper');
-        this.menuScroll = new BScroll(menuWrapper);
+        this.menuScroll = new BScroll(menuWrapper, {
+          click: true
+        });
         let foodWrapper = document.querySelector('.foods-wrapper');
-        this.foodScroll = new BScroll(foodWrapper);
+        this.foodScroll = new BScroll(foodWrapper, {
+          probeType: 3
+        });
+
+        this.foodScroll.on('scroll', (pos) => {
+          this.scrollY = Math.abs(Math.round(pos.y));
+        });
+      },
+      _calculateHeight() {
+        let foodList = document.querySelector('.foods-wrapper').getElementsByClassName('food-list-hook');
+        let height = 0;
+        this.listHeight.push(height);
+        for(let i=0;i<foodList.length;i++) {
+          let item = foodList[i];
+          height += item.clientHeight;
+          this.listHeight.push(height);
+        }
+        console.log(this.listHeight);
       }
     }
   };
@@ -98,6 +136,14 @@
         width: 56px
         line-height: 14px
         padding: 0 12px
+        &.current
+          postion: relative
+          z-index: 10
+          margin-top: -1
+          background: #fff
+          font: 700
+          .text
+            border-none()
         .icon
           display: inline-block
           width: 12px
