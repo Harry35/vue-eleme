@@ -223,7 +223,10 @@
           return;
         }
         window.alert(`支付${this.totalPrice}元`);
-      }
+      },
+      addFood(target) {
+        this.drop(target);
+      },
     },
     components: {
       cartcontrol,
