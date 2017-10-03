@@ -1,6 +1,8 @@
 <template>
-  <div>
-    I am ratings
+  <div class="ratings">
+    <div class="ratings-content">
+
+    </div>
   </div>
 </template>
 
@@ -11,4 +13,11 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+.ratings
+  postition: absolute
+  top: 174px
+  bottom: 0
+  left: 0
+  width: 100%
+  overflow: hidden
 </style>
