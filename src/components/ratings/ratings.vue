@@ -23,4 +23,13 @@
   left: 0
   width: 100%
   overflow: hidden
+  .overview
+    display: flex
+    padding: 18px
+    .overview-left
+      flex: 0 0 137px
+      width: 137px
+    .overview-right
+      flex: 1
+      padding-left: 24px
 </style>
