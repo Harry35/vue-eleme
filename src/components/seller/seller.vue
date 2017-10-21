@@ -1,5 +1,5 @@
 <template>
-  <div class="seller">
+  <div class="seller" ref="seller">
     <div class="seller-content">
       <div class="overview">
         <h1 class="title">{{seller.name}}</h1>
@@ -46,6 +46,7 @@
 </template>
 
 <script type="text/exmascript-6">
+  import BScroll from 'better-scroll';
   import star from '../../components/star/star';
   import split from '../../components/split/split';
 
@@ -62,6 +63,15 @@
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     },
+    ready() {
+      if (!this.scroll) {
+          this.scroll = new BScroll(this.$refs.seller, {
+            click: true
+          });
+        } else {
+          this.scroll.refresh();
+        }
+    }
   };
 </script>
 
@@ -129,4 +139,33 @@
         line-height: 24px
         font-size: 12px
         color: rgb(240, 20, 20)
+    .supports
+      .support-item
+        padding: 16px 12px
+        border-1px(rgba(7, 17, 27, 0.1))
+        font-size: 0
+      .icon
+        display: inline-block
+        width: 16px
+        height: 16px
+        vertical-align: top
+        margin-right: 6px
+        background-size: 16px 16px
+        background-repeat: no-repeat
+        &.decrease
+          bg-image('decrease_4')
+        &.discount
+          bg-image('discount_4')
+        &.guarantee
+          bg-image('guarantee_4')
+        &.invoice
+          bg-image('invoice_4')
+        &.special
+          bg-image('special_4')
+      .text
+        line-height: 16px
+        font-size: 12px
+        color: rgb(7, 17, 27)
+
+
 </style>
