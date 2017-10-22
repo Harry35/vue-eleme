@@ -63,14 +63,25 @@
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     },
+    watch: {
+      'seller'() {
+        this._initScroll();
+      }
+    },
     ready() {
-      if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.seller, {
-            click: true
-          });
-        } else {
-          this.scroll.refresh();
-        }
+      this._initScroll();
+    },
+    methods: {
+      _initScroll() {
+        if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.seller, {
+              click: true
+            });
+          } else {
+            console.log(this.scroll);
+            this.scroll.refresh();
+          }
+      }
     }
   };
 </script>
@@ -144,6 +155,8 @@
         padding: 16px 12px
         border-1px(rgba(7, 17, 27, 0.1))
         font-size: 0
+        &:last-child
+          border-none()
       .icon
         display: inline-block
         width: 16px
