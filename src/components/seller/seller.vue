@@ -27,6 +27,10 @@
             </div>
           </li>
         </ul>
+        <div class="favorite">
+          <span class="icon-favorite" :class="{'active':favorite}"></span>
+          <span class="text">{{favoriteText}}</span>
+        </div>
       </div>
       <split></split>
       <div class="bulletin">
@@ -74,9 +78,19 @@
         type: Object
       }
     },
+    data() {
+      return {
+        favorite: false
+      };
+    },
     components: {
       star,
       split
+    },
+    computed: {
+      favoriteText() {
+        return this.favorite ? '已收藏' : '未收藏';
+      }
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
